@@ -21,6 +21,6 @@ jobs:
       - name: Test 
         run: npm run test
       - name: Build
-        run: npm run Build
+        run: npm run build
       - name: View folder
         run: ls -l
