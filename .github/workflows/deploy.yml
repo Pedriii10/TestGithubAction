@@ -1,19 +1,20 @@
 name: Deploy
 
 on:
-  workflow_dispatch:
-
+  workflow_dispatch: # Hace que aparezca un botón en Github Actions para poder ejecutar el workflow
   push:
-    branches: ["main"]
-
-  #schedule:
+    branches: ["main"] # Se ejecuta el WF cuando se sube un nuevo commit a la main
+# schedule:
+#    - cron: '48 21 * * *' # Se ejecutaría cada día a las 21:48 
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repo
-        uses: actions/checkout@v4     
+        uses: actions/checkout@v4
+
+
       - name: Install dependencies
         run: npm ci
       - name: Linter
@@ -22,14 +23,22 @@ jobs:
         run: npm run test
       - name: Build
         run: npm run build
-      - name: View folder
+
+
+      - name: View folder  # Opcional, es sólo para ver los ficheros generados
         run: ls -l
+
+
       - name: Upload ftp
         uses: sebastianpopp/ftp-action@releases/v2
         with:
-          host: ${{ FTP_HOST }}
-          user: ${{ FTP_USER }}
-          password: ${{ FTP_PASS }}
+          host: ${{ secrets.FTP_SERVER }}
+          user: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
           localDir: "dist"
           remoteDir: "htdocs"
           options: "--delete --asci"
+
+
+
+        
